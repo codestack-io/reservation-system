@@ -42,11 +42,11 @@ export default function RootLayout({
 
   <div className="fixed inset-0 -z-10 overflow-hidden">
 
-    <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-orange-500/30 blur-[140px] rounded-full animate-pulse" />
+    {/* <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-orange-500/30 blur-[140px] rounded-full animate-pulse" />
 
     <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-pink-500/20 blur-[140px] rounded-full animate-pulse" />
 
-    <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-yellow-500/10 blur-[120px] rounded-full" />
+    <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-yellow-500/10 blur-[120px] rounded-full" /> */}
 
   </div>
 

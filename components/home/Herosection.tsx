@@ -1,49 +1,66 @@
-import Link from "next/link";
+"use client";
+
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center text-white">
+    <Swiper
+      direction="vertical"
+      slidesPerView={1}
+      mousewheel={true}
+      pagination={{ clickable: true }}
+      modules={[Mousewheel, Pagination]}
+      className="h-screen"
+    >
 
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-        //   backgroundImage: "url('/images/hero/hero.jpg')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
+      {/* HERO SLIDE */}
+      <SwiperSlide>
+        <section className="relative h-screen w-full overflow-hidden">
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6">
-        <p className="uppercase tracking-[6px] text-sm mb-4 text-orange-400">
-          Luxury Dining Experience
-        </p>
+          <Image
+            src="/images/hero/bg image.jpg"
+            alt="Restaurant Background"
+            fill
+            priority
+            className="object-cover"
+          />
 
-        <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-          Reserve Your <br /> Perfect Table
-        </h1>
+          <div className="absolute inset-0 bg-black/40 z-10" />
 
-        <p className="max-w-2xl mx-auto text-gray-300 mb-8 text-lg">
-          Experience fine dining, premium cuisine, and unforgettable moments.
-        </p>
+          <div className="relative z-20 flex items-center justify-center h-full text-white text-center">
+            <div>
+              
 
-        <div className="flex gap-4 justify-center">
-          <Link
-            href="/reservation"
-            className="bg-orange-500 hover:bg-orange-600 transition px-8 py-3 rounded-full font-medium"
-          >
-            Book Table
-          </Link>
+              <p className="mt-4 text-xl text-gray-300">
+                Reserve perfect table
+                
+              </p>
+            </div>
+          </div>
 
-          <Link
-            href="/menu"
-            className="border border-white hover:bg-white hover:text-black transition px-8 py-3 rounded-full font-medium"
-          >
-            Explore Menu
-          </Link>
-        </div>
-      </div>
-    </section>
+        </section>
+      </SwiperSlide>
+
+      {/* SECOND SLIDE */}
+      <SwiperSlide>
+        <section className="h-screen bg-white text-cyan-700 flex items-center justify-center">
+          <div className="container align-items-center flex justify-between">
+           <div>
+                <h2 className="text-4xl font-bold mb-4">Experience Culinary Excellence</h2>
+           </div>
+           <div className = "bg-gray-200 p-6 rounded-lg shadow-lg">
+        
+           </div>
+        
+          </div>
+        </section>
+      </SwiperSlide>
+
+    </Swiper>
   );
 }
