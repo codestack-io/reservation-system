@@ -13,7 +13,7 @@ const Header = () => {
         
         {/* LOGIN BUTTON */}
         <Link
-          href="/login"
+          href="auth/login"
           className="px-5 py-2 rounded-full border border-white/20 hover:border-white transition duration-300"
         >
           Login
@@ -21,7 +21,7 @@ const Header = () => {
 
         {/* MY ACCOUNT BUTTON */}
         <Link
-          href="/account"
+          href="auth/account"
           className="px-5 py-2 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition duration-300"
         >
           My Account

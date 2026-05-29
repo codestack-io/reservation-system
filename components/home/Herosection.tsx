@@ -109,7 +109,7 @@ export default function HeroSection() {
       {/* Left Content Column */}
       <div className="flex-3 max-w-5xl px-6 md:px-12 py-10">
         <p className= "text-3xl md:text-4xl text-gray-800 mb-2">
-          It's your relax time.Turn it out more exciting with our reservation system.
+          Its your relax time.Turn it out more exciting with our reservation system.
         </p>
         <h2 className="text-5xl font-bold text-slate-900 mb-10 flex items-center gap-3">
           <span>🧑‍🍳</span> Restaurant with relaxation
