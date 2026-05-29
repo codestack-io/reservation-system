@@ -150,6 +150,8 @@
 
   body {
     @apply text-foreground;
+    font-family: var(--font-caveat);
+
     
 
     /* background:
