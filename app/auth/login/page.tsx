@@ -3,8 +3,73 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
+import { auth } from "@/lib/firebase";
+
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
 export default function LoginPage() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // EMAIL LOGIN
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    try {
+
+      const result = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      console.log(result.user);
+
+      toast.success("🎉 Account created successfully");
+
+    } catch (error) {
+
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      console.log(errorMessage);
+      alert(errorMessage);
+
+    }
+  };
+
+  // GOOGLE LOGIN
+  const handleGoogleLogin = async () => {
+
+    const provider = new GoogleAuthProvider();
+
+    try {
+
+      const result = await signInWithPopup(
+        auth,
+        provider
+      );
+
+      console.log(result.user);
+       toast.success("🎉 Google Login successful");
+    
+
+    } catch (error) {
+
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      console.log(errorMessage);
+      alert(errorMessage);
+
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
@@ -40,7 +105,10 @@ export default function LoginPage() {
         </div>
 
         {/* FORM */}
-        <form className="mt-10 space-y-5">
+        <form
+          onSubmit={handleLogin}
+          className="mt-10 space-y-5"
+        >
 
           {/* EMAIL */}
           <div>
@@ -51,6 +119,10 @@ export default function LoginPage() {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white transition"
             />
           </div>
@@ -64,6 +136,10 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white transition"
             />
           </div>
@@ -71,7 +147,7 @@ export default function LoginPage() {
           {/* FORGOT PASSWORD */}
           <div className="flex justify-end">
             <Link
-              href="auth/forgot-password"
+              href="/auth/forgot-password"
               className="text-sm text-gray-300 hover:text-white transition"
             >
               Forgot Password?
@@ -89,13 +165,16 @@ export default function LoginPage() {
           {/* DIVIDER */}
           <div className="flex items-center gap-4">
             <div className="h-px bg-white/20 flex-1" />
-            <span className="text-gray-400 text-sm">OR</span>
+            <span className="text-gray-400 text-sm">
+              OR
+            </span>
             <div className="h-px bg-white/20 flex-1" />
           </div>
 
           {/* GOOGLE LOGIN */}
           <button
             type="button"
+            onClick={handleGoogleLogin}
             className="w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 transition"
           >
             Continue with Google

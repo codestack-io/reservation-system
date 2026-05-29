@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat_Brush } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const caveatBrush = Caveat_Brush({
   variable: "--font-caveat",
@@ -32,6 +33,7 @@ export default function RootLayout({
         </div>
 
         {children}
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

@@ -3,8 +3,54 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
+import { auth } from "@/lib/firebase";
+
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
 export default function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleRegister = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      // CREATE USER
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // UPDATE USER NAME
+      await updateProfile(result.user, {
+        displayName: name,
+      });
+
+       toast.success("🎉 Account created successfully");
+
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : String(error);
+      console.log(message);
+      toast.error("❌ " + message);
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
@@ -39,29 +85,42 @@ export default function RegisterPage() {
         </div>
 
         {/* FORM */}
-        <form className="mt-10 space-y-5">
+        <form
+          onSubmit={handleRegister}
+          className="mt-10 space-y-5"
+        >
 
           <input
             type="text"
             placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white"
           />
 
           <input
             type="email"
             placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white"
           />
 
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white"
           />
 
           <input
             type="password"
             placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) =>
+              setConfirmPassword(e.target.value)
+            }
             className="w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 outline-none focus:border-white"
           />
 
@@ -78,7 +137,7 @@ export default function RegisterPage() {
         <p className="mt-8 text-center text-gray-300">
           Already have an account?{" "}
           <Link
-            href="/login"
+            href="/auth/login"
             className="text-white hover:underline"
           >
             Login
