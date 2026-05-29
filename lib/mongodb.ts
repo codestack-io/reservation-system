@@ -22,4 +22,9 @@ if (!global._mongoClientPromise) {
 
 clientPromise = global._mongoClientPromise as Promise<MongoClient>;
 
+export async function connectDB() {
+  const db = await clientPromise;
+  return db.db("restaurantDB");
+}
+
 export default clientPromise;

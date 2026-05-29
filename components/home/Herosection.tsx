@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
-
+import Link from "next/link";
 import "swiper/css";
 import "swiper/css/pagination";
 import Header from "../shared/Header";
@@ -116,10 +116,9 @@ export default function HeroSection() {
         </h2>
         
         <div className="flex gap-4">
-          <button className="bg-[#68395B] hover:bg-[#522c48] text-white font-medium py-3 px-6 rounded-lg transition">
+          <Link href="/menu" className="bg-[#68395B] hover:bg-[#522c48] text-white font-medium py-3 px-6 rounded-lg transition">
             Start now
-          </button>
-          
+          </Link>
         </div>
       </div>
 
