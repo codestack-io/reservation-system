@@ -1,36 +1,35 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function DashboardPage() {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <h1 className="text-3xl font-bold">
         Dashboard Overview
       </h1>
 
-      <p className="text-gray-500 mt-2">
+      <p className="text-muted-foreground mt-2">
         Welcome to your restaurant admin panel.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <div className="p-5 bg-white rounded-lg shadow">
-          <h2 className="text-sm text-gray-500">
-            Total Reservations
-          </h2>
-          <p className="text-2xl font-bold">120</p>
+        <div className="p-5 rounded-lg border bg-card shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all">
+          Total Reservations: 120
         </div>
 
-        <div className="p-5 bg-white rounded-lg shadow">
-          <h2 className="text-sm text-gray-500">
-            Active Tables
-          </h2>
-          <p className="text-2xl font-bold">18</p>
+        <div className="p-5 rounded-lg border bg-card shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all">
+          Active Tables: 18
         </div>
 
-        <div className="p-5 bg-white rounded-lg shadow">
-          <h2 className="text-sm text-gray-500">
-            Total Menu Items
-          </h2>
-          <p className="text-2xl font-bold">45</p>
+        <div className="p-5 rounded-lg border bg-card shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all">
+          Menu Items: 45
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

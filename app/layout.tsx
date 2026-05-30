@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Caveat_Brush } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Providers } from "./provider";
 
 const caveatBrush = Caveat_Brush({
   variable: "--font-caveat",
@@ -16,23 +17,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
-      className={`
-        ${caveatBrush.variable}
-        h-full antialiased
-      `}
+      suppressHydrationWarning
+      className={caveatBrush.variable}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden relative">
-        <div className="fixed inset-0 -z-10 overflow-hidden">
-          {/* Background effects */}
-        </div>
+        
+        <Providers>
+          {children}
+        </Providers>
 
-        {children}
         <Toaster richColors position="top-center" />
       </body>
     </html>
