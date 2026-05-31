@@ -9,14 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type User = {
-  _id: { toString(): string } | string;
-  name: string;
-  email: string;
-  role: string;
-  reservationCount: number;
-};
-
 export default async function UsersPage() {
   const users = await getUsers();
 
@@ -41,18 +33,16 @@ export default async function UsersPage() {
           </TableHeader>
 
           <TableBody>
-            {users.map((user) => (
-              <TableRow
-                key={
-                  typeof user._id?.toString === "function"
-                    ? user._id.toString()
-                    : String(user._id)
-                }
-              >
+            {users.map((user: (typeof users)[number]) => (
+              <TableRow key={user._id.toString()}>
                 <TableCell>{user.name ?? "-"}</TableCell>
                 <TableCell>{user.email ?? "-"}</TableCell>
-                <TableCell className="capitalize">{user.role ?? "-"}</TableCell>
-                <TableCell>{user.reservationCount ?? 0}</TableCell>
+                <TableCell className="capitalize">
+                  {user.role ?? "-"}
+                </TableCell>
+                <TableCell>
+                  {user.reservationCount ?? 0}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
