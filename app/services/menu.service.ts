@@ -1,8 +1,20 @@
-import clientPromise from "@/lib/mongodb";
+export interface MenuItem {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  rating: number;
+}
 
-export async function getMenuItems() {
-  const client = await clientPromise;
-  const db = client.db("restaurantDB");
+export async function getMenuItems(): Promise<MenuItem[]> {
+  const res = await fetch("http://localhost:3000/api/menu", {
+    cache: "no-store",
+  });
 
-  return await db.collection("menu").find({}).toArray();
+  if (!res.ok) {
+    throw new Error("Failed to fetch menu");
+  }
+
+  return res.json();
 }
