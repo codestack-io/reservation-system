@@ -1,6 +1,9 @@
-import clientPromise from "./mongodb";
+import mongoose from "mongoose";
 
-export async function getDB() {
-  const client = await clientPromise;
-  return client.db("restaurantDB");
+const MONGODB_URI = process.env.MONGODB_URI as string;
+
+export async function connectDB() {
+  if (mongoose.connection.readyState >= 1) return;
+
+  await mongoose.connect(MONGODB_URI);
 }

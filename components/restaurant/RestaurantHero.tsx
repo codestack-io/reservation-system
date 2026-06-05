@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function RestaurantHero() {
   return (
@@ -24,9 +25,11 @@ export default function RestaurantHero() {
             Ocean View Restaurant
           </h1>
 
-          <Button className="mt-6">
-            Reserve Table
-          </Button>
+          <Link href="/dashboard/reservation" className="mt-6 inline-block">
+            <Button variant="outline" size="lg">
+              Reserve Table
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
