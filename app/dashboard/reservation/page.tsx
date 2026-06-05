@@ -106,12 +106,12 @@ export default function ReservationsPage() {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto p-6 bg-white min-h-screen">
+    <div className="max-w-350 mx-auto p-6 bg-white min-h-screen">
       {/* Header Breadcrumb */}
       <div className="flex gap-6 border-b border-gray-100 pb-3 mb-6 text-sm font-medium text-gray-400">
         <button className="hover:text-gray-600">Reservation list</button>
         <button className="hover:text-gray-600">Reservation detail</button>
-        <button className="text-gray-800 border-b-2 border-amber-400 pb-3 -mb-[14px]">
+        <button className="text-gray-800 border-b-2 border-amber-400 pb-3 -mb-3.5">
           Table Reservation
         </button>
       </div>
@@ -120,7 +120,7 @@ export default function ReservationsPage() {
         {/* Left Side: Layout Grid Map */}
         <div className="lg:col-span-3">
           <div className="flex flex-wrap gap-3 mb-8">
-            {(["Regular", "VIP", "Smoking Room", "Dinner"] as const).map((tab) => (
+            {(["Regular", "VIP"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => {
