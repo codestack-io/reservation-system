@@ -3,7 +3,7 @@ import RestaurantGallery from "@/components/restaurant/RestaurantGallery";
 import RestaurantInfo from "@/components/restaurant/Info";
 import RestaurantAmenities from "@/components/restaurant/RestaurantAmenities";
 import RestaurantReviews from "@/components/restaurant/RestaurantReviews";
-import RestaurantMap from "@/components/restaurant/Map";
+import RestaurantMap from "@/components/restaurant/RestaurantMap";
 
 export default async function RestaurantPage() {
   return (

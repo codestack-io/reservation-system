@@ -1,5 +1,7 @@
 "use client";
+"use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -22,9 +24,22 @@ interface HeroSectionProps {
   restaurants: Restaurant[];
 }
 
+
+
+
 export default function HeroSection({
   restaurants,
 }: HeroSectionProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlay = async () => {
+    if (videoRef.current) {
+      await videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <Swiper
       direction="vertical"
@@ -69,7 +84,8 @@ export default function HeroSection({
               </h1>
 
               <p className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                Reserve unforgettable culinary moments crafted with elegance and passion.
+                Reserve unforgettable culinary moments crafted with elegance
+                and passion.
               </p>
 
               <button className="mt-10 px-8 py-4 border border-white rounded-full hover:bg-white hover:text-black transition duration-500">
@@ -88,7 +104,8 @@ export default function HeroSection({
               {/* LEFT */}
               <div>
                 <p className="text-3xl md:text-4xl text-gray-800 mb-4">
-                  Its your relax time. Turn it into something memorable with our reservation system.
+                  Its your relax time. Turn it into something memorable with our
+                  reservation system.
                 </p>
 
                 <h2 className="text-5xl font-bold text-slate-900 mb-8">
@@ -125,28 +142,38 @@ export default function HeroSection({
               </div>
 
               {/* RIGHT */}
-              <div className="relative w-full h-[600px]">
-                <div
-                  className="w-full h-full overflow-hidden shadow-lg"
-                  style={{
-                    borderRadius:
-                      "40% 60% 40% 60% / 40% 40% 60% 60%",
-                  }}
-                >
-                  <Image
-                    src="/images/hero/restaurant-preview.jpg"
-                    alt="Restaurant Preview"
-                    fill
-                    className="object-cover"
-                  />
+            <div className="relative w-full max-w-[550px] aspect-square mx-auto">
+  <div
+    className="relative w-full h-full overflow-hidden shadow-lg"
+    style={{
+      borderRadius:
+        "40% 60% 40% 60% / 40% 40% 60% 60%",
+    }}
+  >
+    <video
+      ref={videoRef}
+      className="w-full h-full object-cover"
+      poster="/images/hero/restaurant-preview.jpg"
+      controls={isPlaying}
+      muted
+    >
+      <source src="/video/food.mp4" type="video/mp4" />
+    </video>
 
-                  <div className="absolute inset-0 bg-black/20" />
+    {!isPlaying && (
+      <>
+        <div className="absolute inset-0 bg-black/20" />
 
-                  <button className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center">
-                    ▶
-                  </button>
-                </div>
-              </div>
+        <button
+          onClick={handlePlay}
+          className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl shadow-lg hover:scale-110 transition z-10"
+        >
+          ▶
+        </button>
+      </>
+    )}
+  </div>
+</div>
             </div>
           </div>
         </section>

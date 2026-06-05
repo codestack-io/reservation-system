@@ -4,10 +4,10 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const images = [
-  "/images/gallery/1.jpg",
-  "/images/gallery/2.jpg",
-  "/images/gallery/3.jpg",
-  "/images/gallery/4.jpg",
+  "/images/1.jpg",
+  "/images/2.jpg",
+  "/images/5.jpg",
+  "/images/5.jpg",
 ];
 
 export default function RestaurantGallery() {

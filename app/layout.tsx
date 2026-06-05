@@ -3,6 +3,7 @@ import { Caveat_Brush } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Providers } from "./provider";
+import "leaflet/dist/leaflet.css";
 
 const caveatBrush = Caveat_Brush({
   variable: "--font-caveat",

@@ -1,7 +1,7 @@
 "use client";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import 'leaflet/dist/leaflet.css';
 
 interface RestaurantMapProps {
   name: string;
@@ -9,31 +9,30 @@ interface RestaurantMapProps {
   longitude: number;
 }
 
-export default function RestaurantMap({
+export default function Map({
   name,
   latitude,
   longitude,
 }: RestaurantMapProps) {
   const center: [number, number] = [latitude, longitude];
-
+  const position = [51.505, -0.09];
   return (
-    <div className="overflow-hidden rounded-xl border">
+    <div className="overflow-hidden w-full h-[400px] border">
       <MapContainer
         center={center}
         zoom={15}
-        style={{
-          height: "450px",
-          width: "100%",
-        }}
+        scrollWheelZoom={false}
+        className= 'h-[400px]'
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <Marker position={center}>
+        <Marker position={position}>
           <Popup>{name}</Popup>
         </Marker>
       </MapContainer>
+      
     </div>
   );
 }

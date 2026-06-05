@@ -8,7 +8,7 @@ export default function RestaurantHero() {
   return (
     <section className="relative h-[500px]">
       <Image
-        src="/images/hero/restaurant.jpg"
+        src="/images/2.jpg"
         alt="Ocean View Restaurant"
         fill
         className="object-cover"
