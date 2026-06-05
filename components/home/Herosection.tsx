@@ -1,5 +1,5 @@
 "use client";
-"use client";
+
 
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import Header from "../shared/Header";
+import RestaurantContent from "../restaurant/RestaurantContent";
 
 interface Restaurant {
   _id: string;
@@ -112,33 +113,7 @@ export default function HeroSection({
                   🧑‍🍳 Restaurant with Relaxation
                 </h2>
 
-                <div className="space-y-4">
-                  {restaurants.map((restaurant) => (
-                    <div
-                      key={restaurant._id}
-                      className="bg-white rounded-xl p-5 shadow-md"
-                    >
-                      <h3 className="text-xl font-bold">
-                        {restaurant.name}
-                      </h3>
-
-                      <p className="text-gray-500 mt-2">
-                        {restaurant.address}
-                      </p>
-
-                      <p className="text-gray-600 mt-2">
-                        {restaurant.description}
-                      </p>
-
-                      <Link
-                        href={`/restaurants/${restaurant._id}`}
-                        className="inline-block mt-4 bg-[#68395B] hover:bg-[#522c48] text-white font-medium py-3 px-6 rounded-lg transition"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  ))}
-                </div>
+               <RestaurantContent restaurants={restaurants}></RestaurantContent>
               </div>
 
               {/* RIGHT */}

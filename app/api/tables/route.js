@@ -6,9 +6,14 @@ export async function GET() {
   try {
     await connectDB();
 
-    const tables = await Table.find();
+    const tables = await Table.find().lean();
 
-    return Response.json(tables);
+    const safeTables = tables.map((t) => ({
+      ...t,
+      _id: t._id.toString(),
+    }));
+
+    return Response.json(safeTables);
   } catch (error) {
     return Response.json(
       { message: "Failed to fetch tables" },
