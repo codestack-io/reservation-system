@@ -1,29 +1,40 @@
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { Table } from "@/types/table.type";
+import table from "../models/table";
 
 const COLLECTION = "tables";
 
 export async function getTables() {
   const client = await clientPromise;
-
   const db = client.db();
 
-  return db
+  const tables = await db
     .collection(COLLECTION)
     .find({})
     .sort({ tableNumber: 1 })
     .toArray();
+
+  return tables.map((t) => ({
+    ...t,
+    _id: t._id.toString(), // ✅ FIX CRITICAL
+  }));
 }
 
 export async function getTableById(id: string) {
   const client = await clientPromise;
-
   const db = client.db();
 
-  return db.collection(COLLECTION).findOne({
+  const table = await db.collection(COLLECTION).findOne({
     _id: new ObjectId(id),
   });
+
+  if (!table) return null;
+
+  return {
+    ...table,
+    _id: table._id.toString(), // ✅ IMPORTANT
+  };
 }
 
 export async function createTable(data: Table) {

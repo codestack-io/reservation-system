@@ -55,7 +55,7 @@ export default function ReservationsPage() {
         }
 
         return {
-          _id: t._id,
+           _id: String(t._id),
           tableNumber: t.tableNumber || `0${index + 1}A`,
           capacity: t.capacity || 4,
           category: cat,

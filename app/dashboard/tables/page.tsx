@@ -1,3 +1,4 @@
+
 import { getTables } from "../../services/table.service";
 import CreateTableForm from "./CreateTableForm";
 import TableLayout from "./components/TableLayout";
@@ -57,7 +58,10 @@ export default async function TablesPage() {
           Restaurant Floor
         </h2>
 
-        <TableLayout tables={tables} />
+        <TableLayout
+  tables={tables}
+  onSelectTable={() => {}}
+/>
       </div>
     </div>
   );
