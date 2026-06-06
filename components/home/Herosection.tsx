@@ -32,14 +32,7 @@ export default function HeroSection({
   restaurants,
 }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
-  const handlePlay = async () => {
-    if (videoRef.current) {
-      await videoRef.current.play();
-      setIsPlaying(true);
-    }
-  };
 
   return (
     <Swiper
@@ -105,12 +98,11 @@ export default function HeroSection({
               {/* LEFT */}
               <div>
                 <p className="text-3xl md:text-4xl text-gray-800 mb-4">
-                  Its your relax time. Turn it into something memorable with our
-                  reservation system.
+                  Its your relax time. 
                 </p>
 
                 <h2 className="text-5xl font-bold text-slate-900 mb-8">
-                  🧑‍🍳 Restaurant with Relaxation
+                  🧑‍🍳 What you need !!
                 </h2>
 
                <RestaurantContent restaurants={restaurants}></RestaurantContent>
@@ -122,31 +114,23 @@ export default function HeroSection({
     className="relative w-full h-full overflow-hidden shadow-lg"
     style={{
       borderRadius:
-        "40% 60% 40% 60% / 40% 40% 60% 60%",
+        "40% 60% 40% 60% / 40% 40% 60% 40%",
     }}
   >
     <video
-      ref={videoRef}
-      className="w-full h-full object-cover"
-      poster="/images/hero/restaurant-preview.jpg"
-      controls={isPlaying}
-      muted
-    >
-      <source src="/video/food.mp4" type="video/mp4" />
-    </video>
+  ref={videoRef}
+  className="w-full h-full object-cover"
+  poster="/images/preview.jpg"
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="auto"
+>
+  <source src="/video/food.mp4" type="video/mp4" />
+</video>
 
-    {!isPlaying && (
-      <>
-        <div className="absolute inset-0 bg-black/20" />
-
-        <button
-          onClick={handlePlay}
-          className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl shadow-lg hover:scale-110 transition z-10"
-        >
-          ▶
-        </button>
-      </>
-    )}
+   
   </div>
 </div>
             </div>

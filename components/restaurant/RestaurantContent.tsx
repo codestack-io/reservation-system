@@ -32,7 +32,7 @@ export default function RestaurantContent({
         className="inline-block cursor-pointer"
       >
         <h3 className="text-2xl font-bold text-[#68395B] border-b-2 border-[#68395B] pb-2">
-          Explore Our Restaurants →
+          Explore with us
         </h3>
 
         <p className="text-gray-500 mt-2">
