@@ -3,7 +3,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Pagination } from "swiper/modules";
@@ -13,6 +13,9 @@ import "swiper/css/pagination";
 
 import Header from "../shared/Header";
 import RestaurantContent from "../restaurant/RestaurantContent";
+import Navbar from "../shared/Navbar";
+
+
 
 interface Restaurant {
   _id: string;
@@ -21,8 +24,17 @@ interface Restaurant {
   description: string;
 }
 
+interface LocationData {
+  _id: string;
+  city: string;
+  country: string;
+}
+
 interface HeroSectionProps {
   restaurants: Restaurant[];
+  locations: LocationData[];
+ 
+
 }
 
 
@@ -30,10 +42,15 @@ interface HeroSectionProps {
 
 export default function HeroSection({
   restaurants,
+ locations,
 }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  
 
+
+   
+  
   return (
     <Swiper
       direction="vertical"
@@ -91,52 +108,59 @@ export default function HeroSection({
       </SwiperSlide>
 
       {/* SECOND SLIDE */}
-      <SwiperSlide>
-        <section className="h-screen bg-yellow-100 flex items-center">
-          <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* LEFT */}
-              <div>
-                <p className="text-3xl md:text-4xl text-gray-800 mb-4">
-                  Its your relax time. 
-                </p>
+     <SwiperSlide>
+  <section className="relative h-screen bg-yellow-100">
+    
+    {/* Navbar */}
+    <div className="absolute top-0 left-0 w-full z-50">
+      <Navbar locations={locations} />
+    </div>
 
-                <h2 className="text-5xl font-bold text-slate-900 mb-8">
-                  🧑‍🍳 What you need !!
-                </h2>
+    {/* Content */}
+    <div className="h-full flex items-center">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* LEFT */}
+          <div>
+            <p className="text-3xl md:text-4xl text-gray-800 mb-4">
+              Its your relax time.
+            </p>
 
-               <RestaurantContent restaurants={restaurants}></RestaurantContent>
-              </div>
+            <h2 className="text-5xl font-bold text-slate-900 mb-8">
+              🧑‍🍳 What you need !!
+            </h2>
 
-              {/* RIGHT */}
-            <div className="relative w-full max-w-[550px] aspect-square mx-auto">
-  <div
-    className="relative w-full h-full overflow-hidden shadow-lg"
-    style={{
-      borderRadius:
-        "40% 60% 40% 60% / 40% 40% 60% 40%",
-    }}
-  >
-    <video
-  ref={videoRef}
-  className="w-full h-full object-cover"
-  poster="/images/preview.jpg"
-  autoPlay
-  muted
-  loop
-  playsInline
-  preload="auto"
->
-  <source src="/video/food.mp4" type="video/mp4" />
-</video>
+            <RestaurantContent restaurants={restaurants} />
+          </div>
 
-   
-  </div>
-</div>
+          {/* RIGHT */}
+          <div className="relative w-full max-w-[550px] aspect-square mx-auto">
+            <div
+              className="relative w-full h-full overflow-hidden shadow-lg"
+              style={{
+                borderRadius:
+                  "40% 60% 40% 60% / 40% 40% 60% 40%",
+              }}
+            >
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                poster="/images/preview.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+              >
+                <source src="/video/food.mp4" type="video/mp4" />
+              </video>
             </div>
           </div>
-        </section>
-      </SwiperSlide>
+        </div>
+      </div>
+    </div>
+  </section>
+</SwiperSlide>
     </Swiper>
   );
 }

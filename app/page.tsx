@@ -3,6 +3,7 @@ import FeaturedDishes from "@/components/home/FeaturedDishes";
 import AboutPreview from "@/components/home/AboutPreview";
 import ReservationCTA from "@/components/home/ReservationCTA";
 import GalleryPreview from "@/components/home/GalleryPreview";
+import { getLocations }  from "@/app/services/location.service";
 
 async function getRestaurants() {
   return [
@@ -28,10 +29,12 @@ async function getRestaurants() {
 }
 
 export default async function HomePage() {
+   const locations = await getLocations();;
   const restaurants = await getRestaurants();
   return (
     <main className="overflow-x-hidden">
        <HeroSection
+        locations={locations}
       restaurants={restaurants}
     />
     
