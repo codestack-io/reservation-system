@@ -75,10 +75,10 @@ export default function Navbar({ locations }: NavbarProps) {
         {/* Right Side */}
         <div className="flex items-center gap-4">
           <Link
-            href="/login"
+            href="/dashboard"
             className="text-slate-700 hover:text-slate-900"
           >
-            Login
+            Dashboard
           </Link>
 
           <Link

@@ -37,7 +37,7 @@ export default function DashboardLayout({
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground relative">
+    <div className="flex min-h-screen bg-yellow-100 text-foreground relative">
       
       {/* Hover trigger zone */}
       <div
@@ -48,7 +48,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside
         onMouseLeave={() => setOpen(false)}
-        className={`fixed left-0 top-0 h-full bg-muted/40 backdrop-blur-md border-r shadow-lg transition-all duration-500 overflow-hidden flex flex-col ${
+        className={`fixed left-0 top-0 h-full bg-muted/40 bg-white backdrop-blur-md border-r shadow-lg transition-all duration-500 overflow-hidden flex flex-col ${
           open ? "w-72" : "w-2"
         }`}
       >

@@ -1,68 +1,58 @@
+"use client";
 
-import { getTables } from "../../services/table.service";
-import CreateTableForm from "./CreateTableForm";
-import TableLayout from "./components/TableLayout";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-type Table = {
-  _id: string;
-  id?: string;
-  tableNumber: number;
-  capacity: number;
-  status: 'available' | 'reserved' | 'maintenance';
-  [key: string]: unknown;
-};
+interface DashboardStats {
+  totalReservations: number;
+  activeTables: number;
+  menuItems: number;
+}
 
-export default async function TablesPage() {
-  const tables = (await getTables()) as unknown as Table[];
+export default function DashboardPage() {
+  const [stats, setStats] = useState<DashboardStats>({
+    totalReservations: 0,
+    activeTables: 0,
+    menuItems: 0,
+  });
 
-  const totalTables = tables.length;
+  useEffect(() => {
+    const fetchStats = async () => {
+      const res = await fetch("/api/dashboard");
+      const data = await res.json();
 
-  const availableTables = tables.filter((table: Table) => table.status === "available").length;
+      setStats(data);
+    };
 
-  const reservedTables = tables.filter((table: Table) => table.status === "reserved").length;
+    fetchStats();
+  }, []);
 
   return (
-    <div className="space-y-8">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
       <h1 className="text-3xl font-bold">
-        Table Management
+        Dashboard Overview
       </h1>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="border rounded-lg p-4">
-          <h3>Total Tables</h3>
-          <p className="text-3xl font-bold">
-            {totalTables}
-          </p>
+      <p className="text-muted-foreground mt-2">
+        Welcome to your restaurant admin panel.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div className="p-5 rounded-lg border bg-card shadow-sm">
+          Total Reservations: {stats.totalReservations}
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3>Available</h3>
-          <p className="text-3xl font-bold text-green-600">
-            {availableTables}
-          </p>
+        <div className="p-5 rounded-lg border bg-card shadow-sm">
+          Active Tables: {stats.activeTables}
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3>Reserved</h3>
-          <p className="text-3xl font-bold text-red-600">
-            {reservedTables}
-          </p>
+        <div className="p-5 rounded-lg border bg-card shadow-sm">
+          Menu Items: {stats.menuItems}
         </div>
       </div>
-
-      <CreateTableForm />
-
-      <div>
-        <h2 className="text-xl font-semibold mb-4">
-          Restaurant Floor
-        </h2>
-
-        <TableLayout
-  tables={tables}
-  onSelectTable={() => {}}
-/>
-      </div>
-    </div>
+    </motion.div>
   );
 }

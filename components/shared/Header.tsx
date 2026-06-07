@@ -26,9 +26,7 @@ const Header = () => {
         >
           My Account
         </Link>
-        <Link href="/dashboard" className="px-5 py-2 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition duration-300">
-          Dashboard
-        </Link>
+      
 
       </div>
     </header>
