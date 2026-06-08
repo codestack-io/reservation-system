@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Search, CalendarDays, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Search, CalendarDays, Users, Sun, Moon } from "lucide-react";
 
 interface Location {
   _id: string;
@@ -14,79 +16,88 @@ interface NavbarProps {
 }
 
 export default function Navbar({ locations }: NavbarProps) {
+  const pathname = usePathname();
+  const isDashboard = pathname === "/dashboard";
+
+  const { theme, setTheme } = useTheme();
+
   return (
-    <header className="w-full bg-yellow-100 shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
-        
-        {/* Logo */}
+    <header className="w-full bg-background text-foreground border-b border-border shadow-sm">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+
+        {/* LOGO */}
         <Link
           href="/"
-          className="text-3xl font-light tracking-widest text-slate-900"
+          className="text-2xl sm:text-3xl font-light tracking-widest"
         >
           Élan
         </Link>
 
-        {/* Search Section */}
-        <div className="hidden lg:flex items-center bg-white text-gray-700 border rounded-full shadow-md overflow-hidden">
-          
-          {/* Location */}
-         <div className="flex items-center px-5 py-3 border-r">
-  <Search size={18} />
+        {/* SEARCH */}
+        <div className="hidden lg:flex items-center bg-card border border-border rounded-xl overflow-hidden">
 
-  <select className="ml-2 outline-none bg-transparent w-56">
-    <option value="">Select Location</option>
-
-    {locations.map((location) => (
-      <option key={location._id} value={location.city}>
-        {location.city}, {location.country}
-      </option>
-    ))}
-  </select>
-</div>
-
-          {/* Date */}
-          <div className="flex items-center px-5 py-3 border-r">
-            <CalendarDays size={18} />
-            <input
-              type="date"
-              className="ml-2 outline-none"
-            />
-          </div>
-
-          {/* Guests */}
-          <div className="flex items-center px-5 py-3">
-            <Users size={18} />
-            <select className="ml-2 outline-none bg-transparent">
-              <option>1 Guest</option>
-              <option>2 Guests</option>
-              <option>3 Guests</option>
-              <option>4 Guests</option>
-              <option>5 Guests</option>
-              <option>6 Guests</option>
+          <div className="flex items-center px-4 py-3 border-r border-border">
+            <Search size={18} />
+            <select className="ml-2 bg-transparent outline-none w-44">
+              <option value="">Location</option>
+              {locations.map((location) => (
+                <option key={location._id}>
+                  {location.city}, {location.country}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* Search Button */}
-          <button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 transition">
+          <div className="flex items-center px-4 py-3 border-r border-border">
+            <CalendarDays size={18} />
+            <input type="date" className="ml-2 bg-transparent outline-none" />
+          </div>
+
+          <div className="flex items-center px-4 py-3 border-r border-border">
+            <Users size={18} />
+            <select className="ml-2 bg-transparent outline-none">
+              <option>1 Guest</option>
+              <option>2 Guests</option>
+            </select>
+          </div>
+
+          <button className="bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 transition">
             Search
           </button>
         </div>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-4">
-          <Link
-            href="/dashboard"
-            className="text-slate-700 hover:text-slate-900"
-          >
-            Dashboard
-          </Link>
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3 sm:gap-4">
 
+          {/* DARK/LIGHT TOGGLE */}
+          <button
+            onClick={() =>
+              setTheme(theme === "dark" ? "light" : "dark")
+            }
+            className="p-2 rounded-xl border border-border hover:bg-secondary transition"
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          {/* DASHBOARD */}
+          {!isDashboard && (
+            <Link
+              href="/dashboard"
+              className="text-foreground hover:text-primary transition"
+            >
+              Dashboard
+            </Link>
+          )}
+
+          {/* RESERVE CTA */}
           <Link
             href="/reservations"
-            className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-800 transition"
+            className="bg-primary text-primary-foreground px-5 py-2 rounded-xl hover:opacity-90 transition"
           >
             Reserve
           </Link>
+
         </div>
       </div>
     </header>

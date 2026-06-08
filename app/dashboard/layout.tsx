@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
+
 import {
   LayoutDashboard,
   Calendar,
@@ -15,7 +14,6 @@ import {
   Settings,
   Menu,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const navItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -34,37 +32,39 @@ export default function DashboardLayout({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex min-h-screen bg-yellow-100 text-foreground relative">
-      
-      {/* Hover trigger zone */}
+    <div className="flex min-h-screen bg-background text-foreground">
+
+      {/* ================= HOVER TRIGGER ZONE ================= */}
       <div
-        className="fixed left-0 top-0 h-full w-3 z-50"
+        className="fixed left-0 top-0 h-full w-2 z-50"
         onMouseEnter={() => setOpen(true)}
       />
 
-      {/* Sidebar */}
+      {/* ================= SIDEBAR ================= */}
       <aside
         onMouseLeave={() => setOpen(false)}
-        className={`fixed left-0 top-0 h-full bg-muted/40 bg-white backdrop-blur-md border-r shadow-lg transition-all duration-500 overflow-hidden flex flex-col ${
-          open ? "w-72" : "w-2"
-        }`}
+        className={`fixed left-0 top-0 h-full border-r border-border bg-card backdrop-blur-md shadow-lg transition-all duration-300 flex flex-col
+        ${open ? "w-72" : "w-16"}`}
       >
-        {/* TOP HEADER */}
-        <div className="flex items-center justify-between p-3">
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between p-4 border-b border-border">
+
           {open && (
-            <h1 className="font-bold text-lg animate-fade-down">
+            <h1 className="font-semibold text-lg tracking-wide">
               Admin Panel
             </h1>
           )}
 
-          <Menu className="ml-auto" />
+          <Menu size={20} className="ml-auto text-muted-foreground" />
+
         </div>
 
         {/* NAV */}
-        <nav className="mt-6 space-y-1 px-2 flex-1">
+        <nav className="mt-4 flex-1 space-y-1 px-2">
+
           {navItems.map((item, index) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -73,79 +73,56 @@ export default function DashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300
-                ${
-                  active
-                    ? "bg-primary text-white shadow-md"
-                    : "hover:bg-muted"
-                }
-                ${
-                  open
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-4"
-                }
-                animate-[drop_0.5s_ease_forwards]`}
-                style={{
-                  animationDelay: `${index * 80}ms`,
-                }}
+                style={{ animationDelay: `${index * 50}ms` }}
+                className={`
+                  flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-300
+                  ${active
+                    ? "bg-primary text-primary-foreground shadow"
+                    : "hover:bg-secondary/60"
+                  }
+                `}
               >
                 <Icon size={18} />
-                {open && item.name}
+
+                {open && (
+                  <span className="animate-fade-in">
+                    {item.name}
+                  </span>
+                )}
               </Link>
             );
           })}
+
         </nav>
 
-        {/* THEME BUTTON (BOTTOM FIXED INSIDE SIDEBAR) */}
-        <div className="p-3 border-t">
-          <Button
-            variant="outline"
-            className="w-full flex items-center justify-center gap-2"
-            onClick={() =>
-              setTheme(theme === "dark" ? "light" : "dark")
-            }
-          >
-            {theme === "dark" ? (
-              <>
-                <Sun size={18} />
-                {open && <span>Light Mode</span>}
-              </>
-            ) : (
-              <>
-                <Moon size={18} />
-                {open && <span>Dark Mode</span>}
-              </>
-            )}
-          </Button>
-        </div>
       </aside>
 
-      {/* MAIN */}
+      {/* ================= MAIN CONTENT ================= */}
       <main
-        className={`flex-1 p-6 transition-all duration-500 ${
-          open ? "ml-72" : "ml-2"
-        }`}
+        className={`flex-1 p-6 transition-all duration-300
+        ${open ? "ml-72" : "ml-16"}`}
       >
         {children}
       </main>
 
-      {/* ANIMATION */}
+      {/* ================= ANIMATION ================= */}
       <style jsx>{`
-        @keyframes drop {
-          0% {
+        @keyframes fade-in {
+          from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-6px);
           }
-          100% {
+          to {
             opacity: 1;
             transform: translateY(0);
           }
         }
 
-        .animate-fade-down {
-          animation: drop 0.4s ease-out;
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
         }
       `}</style>
+
     </div>
   );
 }
