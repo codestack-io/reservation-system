@@ -1,17 +1,10 @@
 import { connectDB } from "@/lib/mongodb";
+import Location from "@/app/models/location.model";
 
 export async function getLocations() {
-  const db = await connectDB();
+  await connectDB();
 
-  const locations = await db
-    .collection("locations")
-    .find({})
-    .toArray();
+  const locations = await Location.find({});
 
-  return locations.map((loc) => ({
-    _id: loc._id.toString(),
-    city: loc.city,
-    country: loc.country,
-    image: loc.image ?? null,
-  }));
+  return locations;
 }

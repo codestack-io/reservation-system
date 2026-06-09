@@ -1,30 +1,24 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-const uri = process.env.MONGODB_URI as string;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-if (!uri) {
+if (!MONGODB_URI) {
   throw new Error("MONGODB_URI is missing");
 }
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+let cached = global.mongoose;
 
-// FIX: extend NodeJS Global type properly
-declare global {
-  // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
-
-if (!global._mongoClientPromise) {
-  client = new MongoClient(uri);
-  global._mongoClientPromise = client.connect();
-}
-
-clientPromise = global._mongoClientPromise as Promise<MongoClient>;
 
 export async function connectDB() {
-  const db = await clientPromise;
-  return db.db("restaurantDB");
-}
+  if (cached.conn) return cached.conn;
 
-export default clientPromise;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
