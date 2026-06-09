@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
 import { auth } from "@/lib/firebase";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   signInWithEmailAndPassword,
@@ -17,6 +18,11 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+   const router = useRouter();
+const searchParams = useSearchParams();
+
+const redirectPath =
+  searchParams.get("redirect") || "/dashboard";
 
   // EMAIL LOGIN
   const handleLogin = async (
@@ -26,15 +32,28 @@ export default function LoginPage() {
 
     try {
 
-      const result = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    const result = await signInWithEmailAndPassword(
+  auth,
+  email,
+  password
+);
 
-      console.log(result.user);
+// Example role handling
+const userData = {
+  id: result.user.uid,
+  email: result.user.email,
+  role: "user", // later fetch from backend
+};
 
-      toast.success("🎉 Account created successfully");
+localStorage.setItem(
+  "user",
+  JSON.stringify(userData)
+);
+
+toast.success("🎉 Login successful");
+
+
+      router.push(redirectPath);
 
     } catch (error) {
 
@@ -68,6 +87,7 @@ export default function LoginPage() {
       alert(errorMessage);
 
     }
+   
   };
 
   return (

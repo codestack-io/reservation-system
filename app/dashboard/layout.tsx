@@ -42,11 +42,15 @@ export default function DashboardLayout({
   const role = getRole();
 
   // 🚨 protect dashboard
-  useEffect(() => {
-    if (!role) {
-      router.push("/auth/login");
-    }
-  }, [role]);
+ useEffect(() => {
+  if (!role) {
+    const currentPath = pathname;
+
+    router.push(
+      `/auth/login?redirect=${encodeURIComponent(currentPath)}`
+    );
+  }
+}, [role, pathname, router]);
 
   const navItems = allNavItems.filter((item) => {
     if (!item.role) return true; // public dashboard items

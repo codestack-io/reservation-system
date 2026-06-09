@@ -1,6 +1,7 @@
 {
   "name": "reservation-system",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^12.14.0",

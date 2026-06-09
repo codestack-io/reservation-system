@@ -1,16 +1,9 @@
 import express from "express";
-import { authMiddleware } from "../middleware/auth.middleware.js";
-import { roleMiddleware } from "../middleware/role.middleware.js";
+import { register, login } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-router.get(
-  "/users",
-  authMiddleware,
-  roleMiddleware(["admin"]),
-  (req, res) => {
-    res.json({ message: "Admin only data" });
-  }
-);
+router.post("/register", register);
+router.post("/login", login);
 
 export default router;
