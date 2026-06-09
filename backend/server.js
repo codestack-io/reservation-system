@@ -7,7 +7,7 @@ import userRoutes from "./routes/user.routes.js";
 
 import connectDB from "./config/db.js";
 
-dotenv.config({ path: "./backend/.env" });
+dotenv.config();
 console.log("🔥 MONGO_URI =", process.env.MONGO_URI);
 
 const app = express();
@@ -16,13 +16,18 @@ const app = express();
 app.use(cors({
    origin: "http://localhost:3000",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }
 
 ));
 app.use(express.json());
 
 // DB connection
-connectDB();
+connectDB()
+.then(() => console.log("DB connected"))
+  .catch((err) => {
+    console.error("DB error:", err);
+  });
 
 // routes
 app.use("/api/auth", authRoutes);

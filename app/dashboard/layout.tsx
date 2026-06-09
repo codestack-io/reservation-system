@@ -20,13 +20,16 @@ const allNavItems = [
   { name: "Reservations", href: "/dashboard/reservation", icon: Calendar },
 
   // ADMIN ONLY
-  { name: "Menu", href: "/dashboard/menu", icon: Utensils, role: "admin" },
+  { name: "Menu", href: "/dashboard/menu", icon: Utensils, role: "user" },
   { name: "Tables", href: "/dashboard/tables", icon: Table, role: "admin" },
   { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3, role: "admin" },
   { name: "Users", href: "/dashboard/users", icon: Users, role: "admin" },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings, role: "admin" },
-];
 
+  // USER ONLY (PROFILE)
+  { name: "Profile", href: "/dashboard/profile", icon: Users, role: "user" },
+
+  { name: "Settings", href: "/dashboard/settings", icon: Settings, role: "user" },
+];
 export default function DashboardLayout({
   children,
 }: {
@@ -40,36 +43,46 @@ export default function DashboardLayout({
   const router = useRouter();
 
   // ✅ LOAD USER FROM LOCALSTORAGE (FIXED)
-  useEffect(() => {
-    const loadUser = () => {
-      const user = localStorage.getItem("user");
-
-      if (user) {
-        try {
-          const parsed = JSON.parse(user);
-          return parsed.role;
-        } catch (err) {
-          console.error("Invalid user in storage");
-          localStorage.removeItem("user");
-        }
-      }
-      return null;
-    };
-
-    setRole(loadUser());
-    setLoading(false);
-  }, []);
+ 
 
   // 🚨 PROTECT ROUTE (FIXED LOOP ISSUE)
-  useEffect(() => {
-    if (loading) return;
+ useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    if (!role) {
-      router.push(
-        `/auth/login?redirect=${encodeURIComponent(pathname)}`
-      );
+      if (!token) {
+        router.push("/auth/login");
+        return;
+      }
+
+      const res = await fetch("http://localhost:5000/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        router.push("/auth/login");
+        return;
+      }
+
+      const data = await res.json();
+
+      setRole(data.user.role);
+
+      // optional sync
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } catch (err) {
+      console.error(err);
+      router.push("/auth/login");
+    } finally {
+      setLoading(false);
     }
-  }, [role, loading, pathname, router]);
+  };
+
+  fetchUser();
+}, []);
 
   // FILTER NAV ITEMS
   const navItems = allNavItems.filter((item) => {

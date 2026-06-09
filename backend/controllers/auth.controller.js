@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import { createToken } from "../utils/jwt.js";
 import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
+import { Request, Response } from "express";
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -146,5 +148,20 @@ export const googleLogin = async (req, res) => {
     res.status(500).json({
       message: error.message,
     });
+  }
+};
+export const getMe = async (req, res) => {
+  try {
+    const userId = req.user.id; // from JWT middleware
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
