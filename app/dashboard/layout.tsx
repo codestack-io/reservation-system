@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 import {
   LayoutDashboard,
@@ -15,14 +15,19 @@ import {
   Menu,
 } from "lucide-react";
 
-const navItems = [
+import { getRole } from "@/lib/auth";
+
+const allNavItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
+
   { name: "Reservations", href: "/dashboard/reservation", icon: Calendar },
-  { name: "Menu", href: "/dashboard/menu", icon: Utensils },
-  { name: "Tables", href: "/dashboard/tables", icon: Table },
-  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { name: "Users", href: "/dashboard/users", icon: Users },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+
+  // 🔴 ADMIN ONLY
+  { name: "Menu", href: "/dashboard/menu", icon: Utensils, role: "admin" },
+  { name: "Tables", href: "/dashboard/tables", icon: Table, role: "admin" },
+  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3, role: "admin" },
+  { name: "Users", href: "/dashboard/users", icon: Users, role: "admin" },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings, role: "admin" },
 ];
 
 export default function DashboardLayout({
@@ -32,40 +37,55 @@ export default function DashboardLayout({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  const role = getRole();
+
+  // 🚨 protect dashboard
+  useEffect(() => {
+    if (!role) {
+      router.push("/auth/login");
+    }
+  }, [role]);
+
+  const navItems = allNavItems.filter((item) => {
+    if (!item.role) return true; // public dashboard items
+    return item.role === role;   // admin-only filter
+  });
 
   const isActive = (href: string) => {
-    if (href === "/dashboard") {
-      return pathname === "/dashboard";
-    }
+    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   };
 
   return (
     <div className="min-h-screen flex bg-[color:var(--background)] text-[color:var(--foreground)]">
 
-      {/* ================= HOVER ZONE ================= */}
+      {/* HOVER ZONE */}
       <div
         className="fixed left-0 top-0 h-full w-2 z-50"
         onMouseEnter={() => setOpen(true)}
       />
 
-      {/* ================= SIDEBAR ================= */}
+      {/* SIDEBAR */}
       <aside
         onMouseLeave={() => setOpen(false)}
-        className={`fixed left-0 top-0 h-full border-r border-[color:var(--border)]
+        className={`fixed left-0 top-0 h-full border-r
         bg-[color:var(--background)] shadow-sm transition-all duration-300 flex flex-col
         ${open ? "w-72" : "w-16"}`}
       >
-
         {/* HEADER */}
-        <div className="flex items-center justify-between p-4 border-b border-[color:var(--border)]">
+        <div className="flex items-center justify-between p-4 border-b">
           {open && (
-            <h1 className="text-base font-semibold tracking-wide">
-              Admin Panel
-            </h1>
+            <div>
+              <h1 className="text-base font-semibold">Admin Panel</h1>
+              <p className="text-xs opacity-60 capitalize">
+                Role: {role}
+              </p>
+            </div>
           )}
 
-          <Menu size={20} className="text-[color:var(--foreground)] opacity-70" />
+          <Menu size={20} className="opacity-70" />
         </div>
 
         {/* NAV */}
@@ -78,17 +98,12 @@ export default function DashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                style={{ animationDelay: `${index * 40}ms` }}
-                className={`
-                  flex items-center gap-3 px-3 py-2 rounded-xl text-sm
-                  transition-all duration-200
-                  
+                className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition
                   ${
                     active
-                      ? "bg-[color:var(--primary)] text-white shadow-sm"
+                      ? "bg-[color:var(--primary)] text-white"
                       : "hover:bg-[color:var(--secondary)]/40"
-                  }
-                `}
+                  }`}
               >
                 <Icon size={18} />
 
@@ -103,15 +118,12 @@ export default function DashboardLayout({
         </nav>
       </aside>
 
-      {/* ================= MAIN ================= */}
-      <main
-        className={`flex-1 p-6 transition-all duration-300
-        ${open ? "ml-72" : "ml-16"}`}
-      >
+      {/* MAIN */}
+      <main className={`flex-1 p-6 transition-all ${open ? "ml-72" : "ml-16"}`}>
         {children}
       </main>
 
-      {/* ================= ANIMATION ================= */}
+      {/* ANIMATION */}
       <style jsx>{`
         @keyframes fade-in {
           from {

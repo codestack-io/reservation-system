@@ -1,21 +1,23 @@
-import { SignJWT, jwtVerify } from "jose";
+export type AuthUser = {
+  id: string;
+  email: string;
+  role: "user" | "admin";
+};
 
-const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET || "secret"
-);
+export const setAuth = (user: AuthUser, token: string) => {
+  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("token", token);
+};
 
-export async function createToken(payload: Record<string, unknown>) {
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d")
-    .sign(secret);
-}
+export const getUser = (): AuthUser | null => {
+  if (typeof window === "undefined") return null;
+  return JSON.parse(localStorage.getItem("user") || "null");
+};
 
-export async function verifyToken(token: string) {
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload;
-  } catch {
-    return null;
-  }
-}
+export const getRole = () => {
+  return getUser()?.role;
+};
+
+export const getToken = () => {
+  return localStorage.getItem("token");
+};
