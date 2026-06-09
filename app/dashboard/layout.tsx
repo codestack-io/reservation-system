@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   LayoutDashboard,
@@ -15,14 +15,11 @@ import {
   Menu,
 } from "lucide-react";
 
-import { getRole } from "@/lib/auth";
-
 const allNavItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
-
   { name: "Reservations", href: "/dashboard/reservation", icon: Calendar },
 
-  // 🔴 ADMIN ONLY
+  // ADMIN ONLY
   { name: "Menu", href: "/dashboard/menu", icon: Utensils, role: "admin" },
   { name: "Tables", href: "/dashboard/tables", icon: Table, role: "admin" },
   { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3, role: "admin" },
@@ -36,31 +33,63 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const pathname = usePathname();
   const router = useRouter();
 
-  const role = getRole();
+  // ✅ LOAD USER FROM LOCALSTORAGE (FIXED)
+  useEffect(() => {
+    const loadUser = () => {
+      const user = localStorage.getItem("user");
 
-  // 🚨 protect dashboard
- useEffect(() => {
-  if (!role) {
-    const currentPath = pathname;
+      if (user) {
+        try {
+          const parsed = JSON.parse(user);
+          return parsed.role;
+        } catch (err) {
+          console.error("Invalid user in storage");
+          localStorage.removeItem("user");
+        }
+      }
+      return null;
+    };
 
-    router.push(
-      `/auth/login?redirect=${encodeURIComponent(currentPath)}`
-    );
-  }
-}, [role, pathname, router]);
+    setRole(loadUser());
+    setLoading(false);
+  }, []);
 
+  // 🚨 PROTECT ROUTE (FIXED LOOP ISSUE)
+  useEffect(() => {
+    if (loading) return;
+
+    if (!role) {
+      router.push(
+        `/auth/login?redirect=${encodeURIComponent(pathname)}`
+      );
+    }
+  }, [role, loading, pathname, router]);
+
+  // FILTER NAV ITEMS
   const navItems = allNavItems.filter((item) => {
-    if (!item.role) return true; // public dashboard items
-    return item.role === role;   // admin-only filter
+    if (!item.role) return true;
+    return item.role === role;
   });
 
   const isActive = (href: string) => {
     if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   };
+
+  // 🔥 IMPORTANT: prevent UI flash before role loads
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-sm opacity-60">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex bg-[color:var(--background)] text-[color:var(--foreground)]">
@@ -74,8 +103,8 @@ export default function DashboardLayout({
       {/* SIDEBAR */}
       <aside
         onMouseLeave={() => setOpen(false)}
-        className={`fixed left-0 top-0 h-full border-r
-        bg-[color:var(--background)] shadow-sm transition-all duration-300 flex flex-col
+        className={`fixed left-0 top-0 h-full border-r bg-[color:var(--background)]
+        shadow-sm transition-all duration-300 flex flex-col
         ${open ? "w-72" : "w-16"}`}
       >
         {/* HEADER */}
@@ -84,7 +113,7 @@ export default function DashboardLayout({
             <div>
               <h1 className="text-base font-semibold">Admin Panel</h1>
               <p className="text-xs opacity-60 capitalize">
-                Role: {role}
+                Role: {role || "user"}
               </p>
             </div>
           )}
@@ -94,7 +123,7 @@ export default function DashboardLayout({
 
         {/* NAV */}
         <nav className="mt-4 flex-1 space-y-1 px-2">
-          {navItems.map((item, index) => {
+          {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
 

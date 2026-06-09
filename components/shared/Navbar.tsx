@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Search, CalendarDays, Users, Sun, Moon } from "lucide-react";
 
 interface Location {
@@ -16,14 +16,43 @@ interface NavbarProps {
 }
 
 export default function Navbar({ locations }: NavbarProps) {
-  const pathname = usePathname();
-  const isDashboard = pathname === "/dashboard";
-
   const { theme, setTheme } = useTheme();
+
+  const [user, setUser] = useState<any>(null);
+
+  // Load user safely
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Invalid user in localStorage");
+        localStorage.removeItem("user");
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  // Logout
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null); // instantly update UI
+    window.location.href = "/auth/login";
+  };
+
+  const loggedInLinks = [
+    { name: "Home", href: "/" },
+    { name: "Explore", href: "/explore" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Blog", href: "/blog" },
+  ];
 
   return (
     <header className="w-full bg-background text-foreground border-b border-border shadow-sm">
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
 
         {/* LOGO */}
@@ -70,34 +99,73 @@ export default function Navbar({ locations }: NavbarProps) {
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3 sm:gap-4">
 
-          {/* DARK/LIGHT TOGGLE */}
+          {/* THEME TOGGLE */}
           <button
             onClick={() =>
               setTheme(theme === "dark" ? "light" : "dark")
             }
-            className="p-2 rounded-xl border border-border hover:bg-secondary transition"
+            className="p-2 rounded-xl border border-border"
           >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            {theme === "dark" ? (
+              <Sun size={18} />
+            ) : (
+              <Moon size={18} />
+            )}
           </button>
 
-          {/* DASHBOARD */}
-          {!isDashboard && (
-            <Link
-              href="/dashboard"
-              className="text-foreground hover:text-primary transition"
-            >
-              Dashboard
-            </Link>
+          {/* AUTH SECTION */}
+          {!user ? (
+            <>
+              <Link href="/auth/login">Login</Link>
+              <Link href="/auth/register">Sign Up</Link>
+            </>
+          ) : (
+            <>
+              {loggedInLinks.map((link) => (
+                <Link key={link.name} href={link.href}>
+                  {link.name}
+                </Link>
+              ))}
+
+              {/* PROFILE DROPDOWN */}
+              <div className="relative group">
+                <button className="px-4 py-2 border rounded-xl">
+                  {user?.name || "Profile"}
+                </button>
+
+                <div className="absolute hidden group-hover:block right-0 mt-2 bg-white text-black shadow-lg rounded-xl overflow-hidden min-w-[150px]">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Profile
+                  </Link>
+
+                  <Link
+                    href="/settings"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Settings
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </>
           )}
 
           {/* RESERVE CTA */}
           <Link
             href="/reservations"
-            className="bg-primary text-primary-foreground px-5 py-2 rounded-xl hover:opacity-90 transition"
+            className="bg-primary text-primary-foreground px-5 py-2 rounded-xl"
           >
             Reserve
           </Link>
-
         </div>
       </div>
     </header>

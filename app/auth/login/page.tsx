@@ -5,14 +5,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
-import { auth } from "@/lib/firebase";
+import { GoogleLogin } from "@react-oauth/google";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+
+
 
 export default function LoginPage() {
 
@@ -25,70 +22,75 @@ const redirectPath =
   searchParams.get("redirect") || "/dashboard";
 
   // EMAIL LOGIN
-  const handleLogin = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    try {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    const result = await signInWithEmailAndPassword(
-  auth,
-  email,
-  password
-);
+    const data = await res.json();
 
-// Example role handling
-const userData = {
-  id: result.user.uid,
-  email: result.user.email,
-  role: "user", // later fetch from backend
+    console.log("LOGIN RESPONSE:", data);
+
+    if (!res.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    if (!data.token || !data.user) {
+      throw new Error("Invalid response from server");
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    toast.success("🎉 Login successful");
+
+    router.push(redirectPath);
+
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Login failed";
+
+    console.log("LOGIN ERROR:", message);
+    toast.error(message);
+  }
 };
 
-localStorage.setItem(
-  "user",
-  JSON.stringify(userData)
-);
-
-toast.success("🎉 Login successful");
-
-
-      router.push(redirectPath);
-
-    } catch (error) {
-
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-      console.log(errorMessage);
-      alert(errorMessage);
-
-    }
-  };
-
   // GOOGLE LOGIN
-  const handleGoogleLogin = async () => {
+const handleGoogleSuccess = async (credentialResponse: any) => {
+  const res = await fetch("http://localhost:5000/api/auth/google", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token: credentialResponse.credential,
+    }),
+  });
 
-    const provider = new GoogleAuthProvider();
+  const data = await res.json();
 
-    try {
+  if (!data.token) {
+    toast.error("Login failed");
+    return;
+  }
 
-      const result = await signInWithPopup(
-        auth,
-        provider
-      );
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
 
-      console.log(result.user);
-       toast.success("🎉 Google Login successful");
-    
+  toast.success("Login successful");
 
-    } catch (error) {
+  // 🔥 FIX: use redirect param like email login
+  const redirectPath =
+    new URLSearchParams(window.location.search).get("redirect") ||
+    "/dashboard";
 
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-      console.log(errorMessage);
-      alert(errorMessage);
-
-    }
-   
-  };
+  router.push(redirectPath);
+};
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -192,13 +194,10 @@ toast.success("🎉 Login successful");
           </div>
 
           {/* GOOGLE LOGIN */}
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            className="w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 transition"
-          >
-            Continue with Google
-          </button>
+         <GoogleLogin
+  onSuccess={handleGoogleSuccess}
+  onError={() => console.log("Login Failed")}
+/>
         </form>
 
         {/* REGISTER */}

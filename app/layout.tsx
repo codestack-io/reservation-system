@@ -3,6 +3,7 @@ import { Caveat_Brush } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Providers } from "./provider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "leaflet/dist/leaflet.css";
 
 const caveatBrush = Caveat_Brush({
@@ -28,10 +29,11 @@ export default function RootLayout({
       className={caveatBrush.variable}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden relative">
-        
-        <Providers>
-          {children}
-        </Providers>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+          <Providers>
+            {children}
+          </Providers>
+        </GoogleOAuthProvider>
 
         <Toaster richColors position="top-center" />
       </body>

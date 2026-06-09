@@ -1,5 +1,5 @@
-import clientPromise from "@/lib/mongodb";
-import type { ObjectId } from "mongodb";
+import { connectDB } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 type User = {
   _id: ObjectId;
@@ -8,24 +8,42 @@ type User = {
   role: string;
 };
 
+type Reservation = {
+  userId: ObjectId;
+};
+
 export async function getUsers(): Promise<
   (User & { reservationCount: number })[]
 > {
-  const client = await clientPromise;
-  const db = client.db("restaurantDB");
+  const db = await connectDB();
+  const database = db.connection.db; // mongoose-safe access
 
-  const users = await db.collection<User>("users").find({}).toArray();
+  if (!database) {
+    throw new Error("Database connection not ready");
+  }
 
-  const reservations = await db
-    .collection("reservations")
-    .find({})
+  // ✅ fetch users
+  const users = await database.collection<User>("users").find({}).toArray();
+
+  // ✅ fetch only needed field (OPTIMIZED)
+  const reservations = await database
+    .collection<Reservation>("reservations")
+    .find({}, { projection: { userId: 1 } })
     .toArray();
 
-  return users.map((user) => ({
+  // ✅ build map (FAST O(n))
+  const countMap = new Map<string, number>();
+
+  for (const r of reservations) {
+    const id = r.userId?.toString();
+    if (!id) continue;
+
+    countMap.set(id, (countMap.get(id) || 0) + 1);
+  }
+
+  // ✅ merge
+  return users.map((user: User) => ({
     ...user,
-    reservationCount: reservations.filter(
-      (reservation) =>
-        reservation.userId?.toString() === user._id.toString()
-    ).length,
+    reservationCount: countMap.get(user._id.toString()) || 0,
   }));
 }

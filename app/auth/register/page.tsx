@@ -5,12 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
-import { auth } from "@/lib/firebase";
 
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -18,38 +13,49 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleRegister = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+ const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+  if (password !== confirmPassword) {
+    toast.error("Passwords do not match");
+    return;
+  }
 
-    try {
-      // CREATE USER
-      const result = await createUserWithEmailAndPassword(
-        auth,
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
         email,
-        password
-      );
+        password,
+      }),
+    });
 
-      // UPDATE USER NAME
-      await updateProfile(result.user, {
-        displayName: name,
-      });
+    const data = await res.json();
 
-       toast.success("🎉 Account created successfully");
-
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : String(error);
-      console.log(message);
-      toast.error("❌ " + message);
+    if (!res.ok) {
+      throw new Error(data.message || "Registration failed");
     }
-  };
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    toast.success("🎉 Account created successfully");
+
+    // redirect to login or dashboard
+    window.location.href = "/auth/login";
+
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Registration failed";
+
+    console.log(message);
+    toast.error("❌ " + message);
+  }
+};
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

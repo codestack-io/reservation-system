@@ -11,7 +11,17 @@ export const setAuth = (user: AuthUser, token: string) => {
 
 export const getUser = (): AuthUser | null => {
   if (typeof window === "undefined") return null;
-  return JSON.parse(localStorage.getItem("user") || "null");
+
+  const user = localStorage.getItem("user");
+
+  if (!user || user === "undefined") return null;
+
+  try {
+    return JSON.parse(user);
+  } catch (err) {
+    console.error("Invalid user in localStorage:", user);
+    return null;
+  }
 };
 
 export const getRole = () => {

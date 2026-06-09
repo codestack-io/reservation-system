@@ -7,12 +7,18 @@ import userRoutes from "./routes/user.routes.js";
 
 import connectDB from "./config/db.js";
 
-dotenv.config();
+dotenv.config({ path: "./backend/.env" });
+console.log("🔥 MONGO_URI =", process.env.MONGO_URI);
 
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+   origin: "http://localhost:3000",
+    credentials: true,
+}
+
+));
 app.use(express.json());
 
 // DB connection
