@@ -4,7 +4,7 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
-
+import restaurantRoutes from "./routes/restaurant.routes.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -32,6 +32,7 @@ connectDB()
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api/restaurants", restaurantRoutes);
 
 // test route
 app.get("/", (req, res) => {

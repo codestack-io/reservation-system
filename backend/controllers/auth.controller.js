@@ -2,7 +2,8 @@ import User from "../models/User.js";
 import { createToken } from "../utils/jwt.js";
 import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
-import { Request, Response } from "express";
+import express from "express";
+
 
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);

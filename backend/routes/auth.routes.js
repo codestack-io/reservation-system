@@ -1,4 +1,6 @@
 import express from "express";
+import { authMiddleware } from "../middleware/auth.middleware.js";
+import { getMe } from "../controllers/auth.controller.js";
 import {
   register,
   login,
