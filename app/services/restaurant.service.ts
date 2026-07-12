@@ -4,5 +4,12 @@ import Restaurant from "@/app/models/restaurant.model";
 export async function getRestaurantById(id: string) {
   await connectDB();
 
-  return await Restaurant.findById(id).lean();
+  const restaurant = await Restaurant.findById(id).lean();
+
+  if (!restaurant) return null;
+
+  return {
+    ...restaurant,
+    _id: restaurant._id.toString(),
+  };
 }
