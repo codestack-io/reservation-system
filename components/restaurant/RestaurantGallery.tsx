@@ -12,7 +12,7 @@ const images = [
 
 export default function RestaurantGallery() {
   return (
-    <section className="container mx-auto">
+    <section className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold mb-8">
         Gallery
       </h2>
@@ -28,7 +28,7 @@ export default function RestaurantGallery() {
               alt="Restaurant"
               width={400}
               height={300}
-              className="rounded-xl object-cover h-64 w-full"
+              className="aspect-[4/3] object-cover rounded-xl w-full"
             />
           </motion.div>
         ))}

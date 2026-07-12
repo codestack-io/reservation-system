@@ -7,7 +7,7 @@ import RestaurantMap from "@/components/restaurant/RestaurantMap";
 
 export default async function RestaurantPage() {
   return (
-    <main className="space-y-12">
+    <main className="space-y-24 pb-24">
       <RestaurantHero />
       <RestaurantInfo />
       <RestaurantGallery />
