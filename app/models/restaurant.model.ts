@@ -1,21 +1,31 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const RestaurantSchema = new mongoose.Schema(
+const RestaurantSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
+    name: String,
+    slug: String,
+    cuisine: String,
+    rating: Number,
+    reviews: Number,
+    priceRange: String,
+    image: String,
+    coverImage: String,
+    address: String,
+    city: String,
+    country: String,
+    phone: String,
+    email: String,
+    openingHours: String,
+    coordinates: {
+      lat: Number,
+      lng: Number,
     },
-    address: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      default: "",
-    },
+    features: [String],
+    description: String,
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default mongoose.models.Restaurant ||

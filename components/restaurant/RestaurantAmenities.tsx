@@ -2,50 +2,50 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Building2,
+  Wine,
+  CalendarCheck,
   Wifi,
   Car,
-  Coffee,
   Music,
+  LucideIcon,
 } from "lucide-react";
 
-const amenities = [
-  {
-    title: "Free WiFi",
-    icon: Wifi,
-  },
-  {
-    title: "Parking",
-    icon: Car,
-  },
-  {
-    title: "Coffee Bar",
-    icon: Coffee,
-  },
-  {
-    title: "Live Music",
-    icon: Music,
-  },
-];
+interface Props {
+  features: string[];
+}
 
-export default function RestaurantAmenities() {
+const icons: Record<string, LucideIcon> = {
+  Rooftop: Building2,
+  Reservations: CalendarCheck,
+  "Wine Selection": Wine,
+  "Free WiFi": Wifi,
+  Parking: Car,
+  "Live Music": Music,
+};
+
+export default function RestaurantAmenities({
+  features,
+}: Props) {
   return (
-    <section className="container mx-auto">
+    <section className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold mb-8">
-        Amenities
+        Features
       </h2>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {amenities.map((item) => (
-          <Card key={item.title}>
-            <CardContent className="p-6 text-center">
-              <item.icon className="mx-auto mb-3 h-8 w-8" />
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {features.map((feature) => {
+          const Icon = icons[feature] ?? Building2;
 
-              <p className="font-medium">
-                {item.title}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+          return (
+            <Card key={feature}>
+              <CardContent className="p-6 text-center">
+                <Icon className="mx-auto mb-3 h-8 w-8" />
+                <p>{feature}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </section>
   );

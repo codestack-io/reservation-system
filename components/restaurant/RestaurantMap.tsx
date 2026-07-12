@@ -1,11 +1,14 @@
-// components/restaurant/RestaurantMap.tsx
-
 "use client";
 
 import dynamic from "next/dynamic";
 
-const Map = dynamic(() => import("./Map"), {
+const RestaurantMap = dynamic(() => import("./Map"), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-[500px] rounded-xl border flex items-center justify-center">
+      Loading map...
+    </div>
+  ),
 });
 
-export default Map;
+export default RestaurantMap;

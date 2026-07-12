@@ -3,36 +3,40 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const images = [
-  "/images/1.jpg",
-  "/images/2.jpg",
-  "/images/5.jpg",
-  "/images/5.jpg",
-];
+interface RestaurantGalleryProps {
+  images: string[];
+}
 
-export default function RestaurantGallery() {
+export default function RestaurantGallery({
+  images,
+}: RestaurantGalleryProps) {
   return (
     <section className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold mb-8">
         Gallery
       </h2>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {images.map((image, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.05 }}
-          >
-            <Image
-              src={image}
-              alt="Restaurant"
-              width={400}
-              height={300}
-              className="aspect-[4/3] object-cover rounded-xl w-full"
-            />
-          </motion.div>
-        ))}
-      </div>
+      {images.length === 0 ? (
+        <p className="text-gray-500">No gallery images available.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {images.map((image, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.05 }}
+              className="overflow-hidden rounded-xl"
+            >
+              <Image
+                src={image}
+                alt={`Restaurant Image ${index + 1}`}
+                width={400}
+                height={300}
+                className="w-full aspect-[4/3] object-cover"
+              />
+            </motion.div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

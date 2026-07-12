@@ -1,17 +1,8 @@
-import clientPromise from "@/lib/mongodb";
+import { connectDB } from "@/lib/db";
+import Restaurant from "@/app/models/restaurant.model";
 
-export async function getRestaurants() {
-  const client = await clientPromise;
+export async function getRestaurantById(id: string) {
+  await connectDB();
 
-  const db = client.db("restaurantDB");
-
-  const restaurants = await db
-    .collection("restaurants")
-    .find({})
-    .toArray();
-
-  return restaurants.map((restaurant) => ({
-    ...restaurant,
-    _id: restaurant._id.toString(),
-  }));
+  return await Restaurant.findById(id).lean();
 }
