@@ -75,22 +75,58 @@
   --background: #FEEAC9;
   --foreground: #2b2b2b;
 
+  --card: #ffffff;
+  --card-foreground: #2b2b2b;
+
+  --popover: #ffffff;
+  --popover-foreground: #2b2b2b;
+
   --primary: #FD7979;
+  --primary-foreground: #ffffff;
+
   --secondary: #FFCDC9;
+  --secondary-foreground: #2b2b2b;
+
+  --muted: #f7efe8;
+  --muted-foreground: #6b7280;
+
   --accent: #FDACAC;
+  --accent-foreground: #2b2b2b;
 
   --border: #f2d6c9;
+  --input: #f2d6c9;
+  --ring: #FD7979;
+
+  --radius: 0.75rem;
 }
 
 .dark {
   --background: #1a1414;
   --foreground: #ffffff;
 
+  --card: #2a2323;
+  --card-foreground: #ffffff;
+
+  --popover: #2a2323;
+  --popover-foreground: #ffffff;
+
   --primary: #FD7979;
-  --secondary: #FFCDC9;
+  --primary-foreground: #ffffff;
+
+  --secondary: #3a2a2a;
+  --secondary-foreground: #ffffff;
+
+  --muted: #332828;
+  --muted-foreground: #cfcfcf;
+
   --accent: #FDACAC;
+  --accent-foreground: #ffffff;
 
   --border: #3a2a2a;
+  --input: #3a2a2a;
+  --ring: #FD7979;
+
+  --radius: 0.75rem;
 }
 @layer base {
   * {
@@ -114,7 +150,7 @@
   linear-gradient(to bottom right, #050505, #0f172a, #000000); */
 
     min-height: 100vh;
-    color: white;
+    
   }
   .card-glow {
   transition: all 0.3s ease;
