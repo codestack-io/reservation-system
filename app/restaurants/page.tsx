@@ -7,6 +7,7 @@ interface Restaurant {
 
 export default async function RestaurantsPage(): Promise<JSX.Element> {
   const restaurants: Restaurant[] = await getRestaurants();
+  console.log("Restaurants data:", restaurants); // Debugging line to check the fetched data
 
   return (
     <div className="grid md:grid-cols-3 gap-6">

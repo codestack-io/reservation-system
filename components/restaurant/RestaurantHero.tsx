@@ -15,16 +15,17 @@ interface RestaurantHeroProps {
 export default function RestaurantHero({
   restaurant,
 }: RestaurantHeroProps) {
+    console.log("Restaurant Data:", restaurant);
+  console.log("Cover Image:", restaurant.coverImage);
+  
   return (
     <section className="relative h-[500px]">
-      <Image
-        src={restaurant.coverImage}
-        alt={restaurant.name}
-        fill
-        className="object-cover"
-        priority
-      />
-       
+     <img
+  src={restaurant.coverImage}
+  alt={restaurant.name}
+  className="absolute inset-0 w-full h-full object-cover"
+/>
+      
       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0 }}

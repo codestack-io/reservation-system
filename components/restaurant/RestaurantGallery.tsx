@@ -26,13 +26,11 @@ export default function RestaurantGallery({
               whileHover={{ scale: 1.05 }}
               className="overflow-hidden rounded-xl"
             >
-              <Image
-                src={image}
-                alt={`Restaurant Image ${index + 1}`}
-                width={400}
-                height={300}
-                className="w-full aspect-[4/3] object-cover"
-              />
+              <img
+  src={image}
+  alt={`Restaurant Image ${index + 1}`}
+  className="w-full aspect-[4/3] object-cover"
+/>
             </motion.div>
           ))}
         </div>

@@ -22,30 +22,41 @@ export default async function RestaurantPage({ params }: PageProps) {
   }
 
   return (
-    <main className="space-y-24 pb-24">
-      <RestaurantHero restaurant={restaurant} />
+    <main className="border-4 border-red-500">
+  <div className="border-4 border-blue-500">
+    <RestaurantHero restaurant={restaurant} />
+  </div>
 
-      {/* @ts-expect-error: props typing mismatch in component definition; passing restaurant data */}
-      <RestaurantInfo restaurant={restaurant} />
+  <div className="border-4 border-green-500">
+    <RestaurantInfo restaurant={restaurant} />
+  </div>
 
- <RestaurantGallery
-  images={[
-    restaurant.image,
-    restaurant.coverImage,
-  ]}
-/>
+  <div className="border-4 border-yellow-500">
+    <RestaurantGallery
+      images={[
+        restaurant.image,
+        restaurant.coverImage,
+      ]}
+    />
+  </div>
 
-      <RestaurantAmenities
-    features={restaurant.features}
-/>
+  <div className="border-4 border-purple-500">
+    <RestaurantAmenities
+      features={restaurant.features}
+    />
+  </div>
 
-      <RestaurantReviews />
+  <div className="border-4 border-pink-500">
+    <RestaurantReviews />
+  </div>
 
-      <RestaurantMap
-    name={restaurant.name}
-    latitude={restaurant.coordinates.lat}
-    longitude={restaurant.coordinates.lng}
-/>
-    </main>
+  <div className="border-4 border-cyan-500">
+    <RestaurantMap
+      name={restaurant.name}
+      latitude={restaurant.coordinates.lat}
+      longitude={restaurant.coordinates.lng}
+    />
+  </div>
+</main>
   );
 }

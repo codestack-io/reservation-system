@@ -5,6 +5,7 @@ import { MapPin, Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Info() {
+  console.log("Info component rendered");
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}

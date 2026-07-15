@@ -19,7 +19,7 @@ const icons: Record<string, LucideIcon> = {
   Rooftop: Building2,
   Reservations: CalendarCheck,
   "Wine Selection": Wine,
-  "Free WiFi": Wifi,
+  "WiFi": Wifi,
   Parking: Car,
   "Live Music": Music,
 };
