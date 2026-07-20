@@ -5,7 +5,7 @@ interface Restaurant {
   _id: string;
 }
 
-export default async function RestaurantsPage(): Promise<JSX.Element> {
+export default async function RestaurantsPage() {
   const restaurants: Restaurant[] = await getRestaurants();
   console.log("Restaurants data:", restaurants); // Debugging line to check the fetched data
 

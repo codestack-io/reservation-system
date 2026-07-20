@@ -1,8 +1,15 @@
-import { clientPromise } from "../../lib/mongodb";
+import { connectDB } from "@/lib/db";
+import Gallery from "@/app/models/gallery.model";
 
 export async function getRestaurantGallery(name: string) {
-  const client = await clientPromise;
-  const db = client.db("restaurantDB");
+  await connectDB();
 
-  return await db.collection("gallery").findOne({ name });
+  const gallery = await Gallery.findOne({ name }).lean();
+
+  if (!gallery) return null;
+
+  return {
+    ...gallery,
+    _id: gallery._id.toString(),
+  };
 }

@@ -6,6 +6,7 @@ import RestaurantReviews from "@/components/restaurant/RestaurantReviews";
 import RestaurantMap from "@/components/restaurant/RestaurantMap";
 import { notFound } from "next/navigation";
 import { getRestaurantById } from "@/app/services/restaurant.service";
+import { getRestaurantGallery } from "@/app/services/gallery.service";
 
 interface PageProps {
   params: Promise<{
@@ -30,7 +31,8 @@ export default async function RestaurantPage({
 
   console.log("Restaurant:", restaurant);
   console.log("Gallery:", gallery);
-
+  console.log("Restaurant name:", restaurant.name);
+console.log("Gallery document:", gallery);
   return (
     <main>
       <RestaurantHero restaurant={restaurant} />

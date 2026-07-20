@@ -11,7 +11,11 @@ interface RestaurantGalleryProps {
 export default function RestaurantGallery({
   images = [],
 }: RestaurantGalleryProps) {
-  console.log(images);
+  console.log("Gallery Images:", images);
+
+images.forEach((img, index) => {
+  console.log(index + 1, img);
+});
 
   if (images.length === 0) {
     return (
