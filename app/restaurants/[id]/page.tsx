@@ -12,51 +12,46 @@ interface PageProps {
     id: string;
   }>;
 }
-export default async function RestaurantPage({ params }: PageProps) {
+
+export default async function RestaurantPage({
+  params,
+}: PageProps) {
   const { id } = await params;
 
+  // Fetch restaurant
   const restaurant = await getRestaurantById(id);
 
   if (!restaurant) {
     notFound();
   }
 
+  // Fetch gallery separately
+  const gallery = await getRestaurantGallery(restaurant.name);
+
+  console.log("Restaurant:", restaurant);
+  console.log("Gallery:", gallery);
+
   return (
-    <main className="border-4 border-red-500">
-  <div className="border-4 border-blue-500">
-    <RestaurantHero restaurant={restaurant} />
-  </div>
+    <main>
+      <RestaurantHero restaurant={restaurant} />
 
-  <div className="border-4 border-green-500">
-    <RestaurantInfo restaurant={restaurant} />
-  </div>
+      <RestaurantInfo restaurant={restaurant} />
 
-  <div className="border-4 border-yellow-500">
-    <RestaurantGallery
-      images={[
-        restaurant.image,
-        restaurant.coverImage,
-      ]}
-    />
-  </div>
+      <RestaurantGallery
+        images={gallery?.gallery ?? []}
+      />
 
-  <div className="border-4 border-purple-500">
-    <RestaurantAmenities
-      features={restaurant.features}
-    />
-  </div>
+      <RestaurantAmenities
+        features={restaurant.features}
+      />
 
-  <div className="border-4 border-pink-500">
-    <RestaurantReviews />
-  </div>
+      <RestaurantReviews />
 
-  <div className="border-4 border-cyan-500">
-    <RestaurantMap
-      name={restaurant.name}
-      latitude={restaurant.coordinates.lat}
-      longitude={restaurant.coordinates.lng}
-    />
-  </div>
-</main>
+      <RestaurantMap
+        name={restaurant.name}
+        latitude={restaurant.coordinates.lat}
+        longitude={restaurant.coordinates.lng}
+      />
+    </main>
   );
 }

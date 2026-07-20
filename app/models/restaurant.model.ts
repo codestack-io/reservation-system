@@ -10,6 +10,8 @@ const RestaurantSchema = new Schema(
     priceRange: String,
     image: String,
     coverImage: String,
+    gallery: [String],
+
     address: String,
     city: String,
     country: String,
