@@ -3,6 +3,7 @@ import RestaurantCard from "@/components/explore/RestaurantCard";
 
 interface Restaurant {
   _id: string;
+  name: string;
 }
 
 export default async function RestaurantsPage() {

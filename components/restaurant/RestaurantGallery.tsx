@@ -64,12 +64,13 @@ images.forEach((img, index) => {
               className="group relative overflow-hidden rounded-3xl shadow-lg"
             >
               <Image
-                src={image}
-                alt={`Restaurant Image ${index + 1}`}
-                width={600}
-                height={450}
-                className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+            src={image}
+            alt={`Restaurant Image ${index + 1}`}
+            width={600}
+            height={450}
+            unoptimized
+            className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+             />
 
               <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </motion.div>

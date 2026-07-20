@@ -1,9 +1,17 @@
 import Link from "next/link";
 
+interface Restaurant {
+  _id: string;
+  name: string;
+  image?: string;
+  city?: string;
+  description?: string;
+}
+
 export default function RestaurantCard({
   restaurant,
 }: {
-  restaurant: any;
+  restaurant: Restaurant;
 }) {
   return (
     <div className="border rounded-xl overflow-hidden shadow-sm">
