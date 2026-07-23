@@ -88,6 +88,7 @@ duration-300
                 width={600}
                 height={400}
                 className="w-full h-40 object-cover"
+                
               />
 
               <div className="p-3 flex-grow">

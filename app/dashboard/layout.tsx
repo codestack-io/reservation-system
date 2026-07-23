@@ -56,7 +56,9 @@ export default function DashboardLayout({
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/auth/me", {
+      const API = process.env.NEXT_PUBLIC_API_URL;
+
+      const res = await fetch(`${API}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -26,7 +26,9 @@ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const API = process.env.NEXT_PUBLIC_API_URL;
+
+    const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +66,9 @@ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 
   // GOOGLE LOGIN
 const handleGoogleSuccess = async (credentialResponse: any) => {
-  const res = await fetch("http://localhost:5000/api/auth/google", {
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const res = await fetch(`${API}/api/auth/google`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

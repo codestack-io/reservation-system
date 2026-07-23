@@ -14,8 +14,12 @@ export async function getRestaurants() {
 
 export async function getRestaurantById(id: string) {
   await connectDB();
+  console.log("Searching ID:", id);
 
   const restaurant = await Restaurant.findById(id).lean();
+
+
+  console.log("Found:", restaurant);
 
   if (!restaurant) return null;
 
